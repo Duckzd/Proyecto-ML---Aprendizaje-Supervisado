@@ -8,6 +8,7 @@ Resumen ejecutivo del proyecto. Es una **visión general**; el detalle, el códi
 resultados completos están en los notebooks (ver sección 9).
 
 Estudiante: Jorge Zúñiga
+
 Fecha: 2025-05-18
 
 ---
