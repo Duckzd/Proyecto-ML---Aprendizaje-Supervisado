@@ -99,7 +99,7 @@ auditable** (requisito regulatorio) y habilita la **inclusión financiera**.
 - **Construcción de datos y variables:** `01_Creación Base de datos.ipynb`
 - **Definición de bueno/malo:** `02_VariableDependiente.ipynb`
 - **EDA, modelo y validación:** `03_Modelamiento.ipynb`
-- **Rúbrica del proyecto:** `Libro1.xlsx`
+
 
 > Las consultas de asistencia de IA usadas en cada paso están documentadas dentro de
 > `03_Modelamiento.ipynb`, en las celdas marcadas con 🤖.
