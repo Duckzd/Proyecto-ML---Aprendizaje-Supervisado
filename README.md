@@ -7,6 +7,9 @@
 Resumen ejecutivo del proyecto. Es una **visión general**; el detalle, el código y los
 resultados completos están en los notebooks (ver sección 9).
 
+Estudiante: Jorge Zúñiga
+Fecha: 2025-05-18
+
 ---
 
 ## 1. El problema
