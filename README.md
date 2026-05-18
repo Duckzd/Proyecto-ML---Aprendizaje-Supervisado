@@ -12,7 +12,7 @@
 *Aprendizaje Supervisado · Regresión Logística Regularizada*
 
 Resumen ejecutivo del proyecto. Es una **visión general**; el detalle, el código y los
-resultados completos están en los notebooks (ver sección 8).
+resultados completos están en los notebooks (ver sección 9).
 
 ---
 
@@ -28,14 +28,42 @@ auditable** (requisito regulatorio) y habilita la **inclusión financiera**.
 
 ## 2. Los datos
 
-- **~79.591 operaciones** de crédito, en **5 cohortes trimestrales** (2021-09 a 2022-09).
+- **~79.591 clientes** con operaciones consolidadas de crédito y tarjetas de crédito, en **5 cohortes trimestrales** (2021-09 a 2022-09).
 - Fuente: **buró de crédito** — comportamiento crediticio + perfil del cliente.
 - Variable objetivo `VarDep`: **bueno (0) / malo (1)**. Se modela solo esa población —
   **41.393 registros (52%)**; el 48% restante son exclusiones de diseño
   (indeterminados, vencidos, sin desempeño, no bancarizados).
 - Tasa de malos: **40,8%**.
 
-## 3. Estructura del proyecto
+## 3. Construcción de la base y la variable objetivo
+
+**Agregación a nivel cliente** (notebook `01`). Un cliente puede tener varias
+operaciones de crédito y tarjetas → varias filas. Se resumen en **una sola fila por
+cliente**, mes a mes (M1…M13):
+
+- **Morosidad → `max`** : la peor mora entre todos sus productos ese mes.
+- **Saldos → `sum`** : la deuda total del cliente ese mes.
+
+| Cliente | Producto | Mora M3 | Saldo M3 |
+|---|---|--:|--:|
+| X | Operación 1 | 30 | 900 |
+| X | Operación 2 | 0 | 460 |
+| X | Tarjeta 1 | 12 | 350 |
+| **X** | **→ agregado** | **30** | **1.710** |
+
+**La variable objetivo `VarDep`** (notebook `02`). Cada crédito se mira en un **punto
+de observación** (`FECHA_CORTE`) y se evalúa su **desempeño en los 12 meses
+siguientes**:
+
+- **Bueno (0):** sin mora relevante en la ventana de desempeño.
+- **Malo (1):** mora alta (> 60 días).
+- **Exclusiones (2–5):** indeterminados, vencidos, sin desempeño, no bancarizados.
+
+El **historial de buró** (hacia atrás) son las variables predictoras; el **desempeño**
+(hacia adelante) define la etiqueta. Nunca se mezclan — esa separación evita la fuga
+de datos.
+
+## 4. Estructura del proyecto
 
 | Notebook | Contenido |
 |---|---|
@@ -43,7 +71,7 @@ auditable** (requisito regulatorio) y habilita la **inclusión financiera**.
 | `02_VariableDependiente` | Definición de la etiqueta bueno/malo según la ventana de desempeño |
 | `03_Modelamiento` | EDA, feature selection, modelo y validación — **cubre la rúbrica** |
 
-## 4. Pasos de la rúbrica (todos en `03_Modelamiento`)
+## 5. Pasos de la rúbrica (todos en `03_Modelamiento`)
 
 | Paso | Qué se hizo |
 |---|---|
@@ -58,7 +86,7 @@ auditable** (requisito regulatorio) y habilita la **inclusión financiera**.
 | **Evaluación final** | Tabla de performance y prueba *out-of-time* sobre `TEST_OOT` |
 | Conclusiones / Referencias | Cierre y bibliografía en formato IEEE |
 
-## 5. Decisiones metodológicas clave
+## 6. Decisiones metodológicas clave
 
 - **Partición temporal:** `DEV` (cohortes 2021-09 a 2022-06) para todo el desarrollo y
   `TEST_OOT` (cohorte 2022-09) reservado como prueba fuera de tiempo.
@@ -70,7 +98,7 @@ auditable** (requisito regulatorio) y habilita la **inclusión financiera**.
 - **Feature selection híbrido:** filtro rápido por *Information Value* (estándar en
   scoring) seguido de un *wrapper* (RFECV) que considera el modelo completo.
 
-## 6. Resultados principales
+## 7. Resultados principales
 
 - De **14 variables** discretizadas se llegó a **18 features** seleccionadas.
 - Modelo final: **regresión logística regularizada L2**, λ óptimo ≈ 162.
@@ -87,19 +115,19 @@ auditable** (requisito regulatorio) y habilita la **inclusión financiera**.
   0,018** — y la tabla de performance sigue rank-ordenando: el modelo es **estable
   fuera de tiempo**.
 
-## 7. Puntos abiertos para la discusión
+## 8. Puntos abiertos para la discusión
 
 - Algunas variables de mora alcanzan un IV muy alto (> 0,5, hasta ≈ 2): conviene
   confirmar que son estrictamente **previas** al punto de observación (riesgo de fuga).
 - Trade-off interpretabilidad vs. desempeño: logística regularizada frente a modelos
   de ensamble (Random Forest gana, pero por un margen mínimo).
 
-## 8. Dónde ver el detalle
+## 9. Dónde ver el detalle
 
 - **Construcción de datos y variables:** `01_Creación Base de datos.ipynb`
 - **Definición de bueno/malo:** `02_VariableDependiente.ipynb`
 - **EDA, modelo y validación:** `03_Modelamiento.ipynb`
-
+- **Rúbrica del proyecto:** `Libro1.xlsx`
 
 > Las consultas de asistencia de IA usadas en cada paso están documentadas dentro de
 > `03_Modelamiento.ipynb`, en las celdas marcadas con 🤖.
