@@ -1,11 +1,4 @@
-> **🤖 Prompt de asistencia de IA**
->
-> *"Crea un archivo markdown con un resumen general del proyecto, pensado para
-> introducir al profesor: una visión global de alto nivel de la que puedan surgir
-> preguntas, de modo que, si quiere ver el detalle explícito, se remita a los
-> notebooks"*
 
----
 
 # Proyecto Final — Modelo de Credit Scoring
 
